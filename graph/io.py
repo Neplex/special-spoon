@@ -7,7 +7,6 @@ class ParseError(Exception):
 
 def from_graph(path):
     """ Read graph from graph file """
-    # TODO
     k = None
     d = {}
     with open(path) as graph_file:
@@ -30,8 +29,9 @@ def from_graph(path):
                 raise ParseError()
             v, e = line.split(':')
             for car in "[], \n": e = e.replace(car,"")
+            v = v.strip(" ")
             d[v] = list(e)
-
+            
     return d, k
 
 
