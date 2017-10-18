@@ -1,6 +1,7 @@
 """ Input/Output for graph """
 import re
 
+
 class ParseError(Exception):
     '''raised when error occured during parse'''
 
@@ -25,13 +26,14 @@ def from_graph(path):
             raise ParseError()
 
         for line in lines[3:]:
-            if re.match(r"[0-9]* *: *\[ *[0-9]* *(, *[0-9]* *)*\]",line) is None:
+            if re.match(r"[0-9]* *: *\[ *[0-9]* *(, *[0-9]* *)*\]", line) is None:
                 raise ParseError()
             v, e = line.split(':')
-            for car in "[], \n": e = e.replace(car,"")
+            for car in "[], \n":
+                e = e.replace(car, "")
             v = v.strip(" ")
             d[v] = list(e)
-            
+
     return d, k
 
 
