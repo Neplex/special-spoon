@@ -1,27 +1,38 @@
 """ graph """
 
+import random
+
+from graph import *
+
 
 def fvs1(graph, k):
     """ fvs1 """
+    modif = False
+
     for v, e in graph.items():
         while v in e:
             e.remove(v)
             k -= 1
-    return k
+            modif = True
+
+    return k, modif
 
 
 def fvs2(graph, k):
     """ fvs2 """
-    return k
+    modif = False
+    return k, modif
 
 
 def fvs3(graph, k):
     """ fvs3 """
-    return k
+    modif = False
+    return k, modif
 
 
 def fvs4(graph, k):
     """ fvs4 """
+    modif = False
     to_remove = []
 
     for v, e in graph.items():
@@ -29,43 +40,55 @@ def fvs4(graph, k):
             graph[e[0]][graph[e[0]].index(v)] = e[1]
             graph[e[1]][graph[e[1]].index(v)] = e[0]
             to_remove.append(v)
+            modif = True
 
     for v in to_remove:
         graph.pop(v)
 
-    return k
-
-
-def fvs5(graph, k):
-    """ fvs5 """
-    return k
+    return k, modif
 
 
 def reduce_graph(graph, k):
     """ reduce graph """
-    modif = True
     new_g = graph
-    new_k = k
+    modif = True
 
     while modif:
-        modif = False
+        k, modif = fvs1(new_g, k)
+        if not modif:
+            k, modif = fvs2(new_g, k)
+        if not modif:
+            k, modif = fvs3(new_g, k)
+        if not modif:
+            k, modif = fvs4(new_g, k)
 
-    return new_g, new_k
+    # FVS5 -> return "no-instance" compute in 'random_fvs'
+
+    return new_g, k
 
 
 def random_fvs(graph, k):
     """ random FVS """
-    new_g, new_k = reduce_graph(graph, k)
+    new_g, k = reduce_graph(graph, k)
 
-    if new_k < 0:
+    if k < 0:
         return False
-    elif new_g:  # new_g est vide
+    elif not len(new_g):
         return True
     else:
-        pass
+        v, _ = random.choice(list(new_g.items()))
+        remove_vertex(new_g, v)
+        random_fvs(new_g, k - 1)
 
 
-def repeat_random_fvs(graph):
+def repeat_random_fvs(graph, k):
     """ repeat random FVS """
-    # TODO
-    return False
+
+    i = 0
+    nb_step = 4**k
+    yes_instance = False
+
+    while i < nb_step and not yes_instance:
+        yes_instance = random_fvs(graph, k)
+
+    return yes_instance

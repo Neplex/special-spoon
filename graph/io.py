@@ -40,7 +40,7 @@ def from_graph(path):
 def to_dot(graph, path):
     """ To dot """
     import graphviz as gv
-    dot = gv.Graph(format="png")
+    dot = gv.Digraph(format="png")
     for vertex, edges in graph.iteritems():
         dot.node(vertex)
         for edge in edges:

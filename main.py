@@ -8,9 +8,6 @@ import graph
 
 def main():
     """ main """
-    # TODO
-    # read file in parameters
-    # compute result
 
     if len(sys.argv) != 2:
         print "Usage: %s <filename>" % sys.argv[0]
@@ -23,7 +20,7 @@ def main():
     except graph.io.ParseError:
         sys.exit("%s: not a valid graph file" % sys.argv[1])
 
-    print g
+    print("yes" if graph.fvs.repeat_random_fvs(g[0], g[1]) else "no")
 
 if __name__ == '__main__':
     main()
