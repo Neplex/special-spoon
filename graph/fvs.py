@@ -90,5 +90,6 @@ def repeat_random_fvs(graph, k):
 
     while i < nb_step and not yes_instance:
         yes_instance = random_fvs(graph, k)
+        i += 1
 
     return yes_instance
