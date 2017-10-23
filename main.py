@@ -9,12 +9,14 @@ import graph
 def main():
     """ main """
 
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2:
         print "Usage: %s <filename>" % sys.argv[0]
         exit(2)
 
     try:
         g = graph.io.from_graph(sys.argv[1])
+        if len(sys.argv) > 2:
+            graph.io.to_dot(g[0], sys.argv[2])
     except IOError:
         sys.exit("%s: file not exist" % sys.argv[1])
     except graph.io.ParseError:
