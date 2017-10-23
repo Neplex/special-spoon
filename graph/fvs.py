@@ -21,29 +21,36 @@ def fvs1(graph, k):
 def fvs2(graph, k):
     """ fvs2 """
     modif = False
+    for v, e in graph.items():
+        for elem in e :
+            while e.count(elem) > 2 :
+                e.remove(elem)
+                modif = True
     return k, modif
 
 
 def fvs3(graph, k):
     """ fvs3 """
     modif = False
+    for v, e in graph.items():
+        if len(e) < 2 :
+            if len(e) == 1 :
+                graph[e[0]].remove(v)
+            del graph[v]
+            modif = True
     return k, modif
 
 
 def fvs4(graph, k):
     """ fvs4 """
     modif = False
-    to_remove = []
 
     for v, e in graph.items():
         if len(e) == 2:
             graph[e[0]][graph[e[0]].index(v)] = e[1]
             graph[e[1]][graph[e[1]].index(v)] = e[0]
-            to_remove.append(v)
+            graph.pop(v)
             modif = True
-
-    for v in to_remove:
-        graph.pop(v)
 
     return k, modif
 
