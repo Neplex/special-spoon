@@ -5,13 +5,14 @@ import random
 from graph import *
 
 
-def fvs1(graph, k):
+def fvs1(graph, k, l):
     """ fvs1 """
     modif = False
 
     for v, e in graph.items():
-        while v in e:
-            e.remove(v)
+        if v in e:
+            remove_vertex(graph, v)
+            l.append(v)
             k -= 1
             modif = True
 
@@ -51,52 +52,59 @@ def fvs4(graph, k):
             graph[e[1]][graph[e[1]].index(v)] = e[0]
             graph.pop(v)
             modif = True
+            break
 
     return k, modif
 
 
-def reduce_graph(graph, k):
+def reduce_graph(graph, k, l):
     """ reduce graph """
-    new_g = graph
     modif = True
 
     while modif:
-        k, modif = fvs1(new_g, k)
+        k, modif = fvs1(graph, k, l)
+        #print("FVS1",graph,k)
         if not modif:
-            k, modif = fvs2(new_g, k)
+            k, modif = fvs2(graph, k)
+            #print("FVS2",graph,k)
         if not modif:
-            k, modif = fvs3(new_g, k)
+            k, modif = fvs3(graph, k)
+            #print("FVS3",graph,k)
         if not modif:
-            k, modif = fvs4(new_g, k)
+            k, modif = fvs4(graph, k)
+            #print("FVS4", graph,k)
 
     # FVS5 -> return "no-instance" compute in 'random_fvs'
 
-    return new_g, k
+    return k
 
 
-def random_fvs(graph, k):
+def random_fvs(graph, k, l):
     """ random FVS """
-    new_g, k = reduce_graph(graph, k)
+    k = reduce_graph(graph, k, l)
 
     if k < 0:
         return False
-    elif not len(new_g):
+    elif not len(graph):
         return True
     else:
-        v, _ = random.choice(list(new_g.items()))
-        remove_vertex(new_g, v)
-        random_fvs(new_g, k - 1)
-
+        v, _ = random.choice(list(graph.items()))
+        l.append(v)
+        remove_vertex(graph, v)
+        return random_fvs(graph, k - 1, l)
 
 def repeat_random_fvs(graph, k):
     """ repeat random FVS """
-
     i = 0
     nb_step = 4**k
     yes_instance = False
+    l = []
 
     while i < nb_step and not yes_instance:
-        yes_instance = random_fvs(graph, k)
+        del l[:]
+        import copy
+        tmp_g = copy.deepcopy(graph)
+        yes_instance = random_fvs(tmp_g, k, l)
         i += 1
 
-    return yes_instance
+    return yes_instance, l
