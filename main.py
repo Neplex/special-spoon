@@ -22,9 +22,9 @@ def main():
     except graph.io.ParseError:
         sys.exit("%s: not a valid graph file" % sys.argv[1])
 
-    res,coupe = graph.fvs.repeat_random_fvs(g, k)
+    res, coupe = graph.fvs.repeat_random_fvs(g, k)
 
-    if res :
+    if res:
         print("yes")
         print(coupe)
     else:

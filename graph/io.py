@@ -29,10 +29,10 @@ def from_graph(path):
             if re.match(r"[0-9]* *: *\[ *[0-9]* *(, *[0-9]* *)*\]", line) is None:
                 raise ParseError()
             v, e = line.split(':')
-            for car in "[] \n":
+            for car in "[],\n":
                 e = e.replace(car, "")
             v = v.strip(" ")
-            d[v] = e.split(",")
+            d[v] = e.split()
 
     return d, k
 
