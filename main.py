@@ -26,7 +26,7 @@ def main():
 
     if res:
         print("yes")
-        print(coupe)
+        print(', '.join(coupe))
     else:
         print("no")
 
